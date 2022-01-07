@@ -182,7 +182,7 @@ class EmployeeCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
         child: Container(
           decoration: getSecondBoxDecoration,
           height: cardHeight,
@@ -195,55 +195,68 @@ class EmployeeCard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      FittedBox(
-                        child: Text(
-                          employee.full_name ?? '',
-                          style: (employee.designation_name!
-                                      .toLowerCase()
-                                      .contains('in-charge') ||
-                                  employee.designation_name!
-                                      .toLowerCase()
-                                      .contains('supervisor') ||
-                                  employee.designation_name!
-                                      .toLowerCase()
-                                      .contains('incharge') ||
-                                  employee.designation_name!
-                                      .toLowerCase()
-                                      .contains('deputy'))
-                              ? kEltEcondtitleText.copyWith(
-                                  color: kEltNeonBlue,
-                                )
-                              : kEltEcondtitleText,
+                      const SizedBox(
+                        height: 2,
+                      ),
+                      Expanded(
+                        child: FittedBox(
+                          child: Text(
+                            employee.full_name ?? '',
+                            style: (employee.designation_name!
+                                        .toLowerCase()
+                                        .contains('in-charge') ||
+                                    employee.designation_name!
+                                        .toLowerCase()
+                                        .contains('supervisor') ||
+                                    employee.designation_name!
+                                        .toLowerCase()
+                                        .contains('incharge') ||
+                                    employee.designation_name!
+                                        .toLowerCase()
+                                        .contains('deputy'))
+                                ? kEltEcondtitleText.copyWith(
+                                    color: kEltNeonBlue,
+                                  )
+                                : kEltEcondtitleText,
+                          ),
                         ),
                       ),
-                      CircleAvatar(
-                        backgroundImage:
-                            NetworkImage('$baseUrl${employee.photo}'),
-                        radius: 50,
-                      ),
-                      FittedBox(
-                        child: Text(
-                          employee.designation_name ?? '',
-                          style: (employee.designation_name!
-                                      .toLowerCase()
-                                      .contains('in-charge') ||
-                                  employee.designation_name!
-                                      .toLowerCase()
-                                      .contains('supervisor') ||
-                                  employee.designation_name!
-                                      .toLowerCase()
-                                      .contains('incharge') ||
-                                  employee.designation_name!
-                                      .toLowerCase()
-                                      .contains('deputy'))
-                              ? kEltEcondtitleText.copyWith(
-                                  color: kEltNeonBlue,
-                                )
-                              : kEltEcondtitleText,
-                          textAlign: TextAlign.center,
+                      Expanded(
+                        flex: 3,
+                        child: CircleAvatar(
+                          backgroundImage:
+                              NetworkImage('$baseUrl${employee.photo}'),
+                          radius: (cardHeight * 1.5) * 0.2,
                         ),
+                      ),
+                      Expanded(
+                        child: FittedBox(
+                          child: Text(
+                            employee.designation_name ?? '',
+                            style: (employee.designation_name!
+                                        .toLowerCase()
+                                        .contains('in-charge') ||
+                                    employee.designation_name!
+                                        .toLowerCase()
+                                        .contains('supervisor') ||
+                                    employee.designation_name!
+                                        .toLowerCase()
+                                        .contains('incharge') ||
+                                    employee.designation_name!
+                                        .toLowerCase()
+                                        .contains('deputy'))
+                                ? kEltEcondtitleText.copyWith(
+                                    color: kEltNeonBlue,
+                                  )
+                                : kEltEcondtitleText,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 2,
                       ),
                     ],
                   ),
