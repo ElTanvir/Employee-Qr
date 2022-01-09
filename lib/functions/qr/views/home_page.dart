@@ -1,10 +1,10 @@
 import 'package:employee_qr/constant/constants.dart';
 import 'package:employee_qr/functions/qr/data_models/branch_data_model.dart';
 import 'package:employee_qr/functions/qr/providers/branch_provider.dart';
-import 'package:employee_qr/functions/qr/views/qr_view.dart';
 import 'package:employee_qr/functions/qr/views/qr_view_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_storage/get_storage.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -38,7 +38,8 @@ class MyHomePage extends StatelessWidget {
 }
 
 class SideButton extends StatelessWidget {
-  const SideButton({Key? key, required this.branch}) : super(key: key);
+  SideButton({Key? key, required this.branch}) : super(key: key);
+  final box = GetStorage();
 
   final BranchData branch;
 
@@ -49,7 +50,8 @@ class SideButton extends StatelessWidget {
       child: InkWell(
         focusColor: kEltnavy,
         onTap: () {
-          Navigator.push(
+          box.write('branch_id', branch.branch_id);
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => EmployeeQrViewv2(

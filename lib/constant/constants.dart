@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 const Color kEltwhite = Color(0xFFF5F5F5);
 const Color kEltred = Color(0xFFF05454);
@@ -39,4 +40,24 @@ final BoxDecoration getSecondBoxDecoration = BoxDecoration(
       color: kEltblack.withOpacity(0.2),
     ),
   ],
+);
+InputDecoration getInputDecoration = const InputDecoration(
+  fillColor: kEltwhite,
+  filled: true,
+  labelStyle: TextStyle(color: kEltblack),
+  focusedBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(10)),
+    borderSide: BorderSide(color: Colors.blue),
+  ),
+  disabledBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(10)),
+    borderSide: BorderSide(color: Colors.grey),
+  ),
+  enabledBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(10)),
+  ),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(10)),
+    borderSide: BorderSide.none,
+  ),
 );

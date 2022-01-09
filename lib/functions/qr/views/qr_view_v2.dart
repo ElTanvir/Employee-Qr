@@ -4,59 +4,107 @@ import 'package:employee_qr/constant/constants.dart';
 import 'package:employee_qr/functions/qr/data_models/department_model.dart';
 import 'package:employee_qr/functions/qr/data_models/employee_model.dart';
 import 'package:employee_qr/functions/qr/providers/branch_provider.dart';
+import 'package:employee_qr/functions/qr/views/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class EmployeeQrViewv2 extends StatelessWidget {
-  const EmployeeQrViewv2({Key? key, required this.branchID}) : super(key: key);
+class EmployeeQrViewv2 extends ConsumerWidget {
+  EmployeeQrViewv2({Key? key, required this.branchID}) : super(key: key);
   final String branchID;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef refx) {
     final Size deviceSize = MediaQuery.of(context).size;
+    Timer.periodic(const Duration(minutes: 59), (timer) {
+      refx.refresh(employeeProvider(branchID));
+      print('Gold');
+    });
     return Scaffold(
+      key: _scaffoldKey,
       body: Consumer(
         builder: (context, ref, child) {
-          final zero = ref.watch(employeeProvider(branchID));
-          return zero.map(
-            data: (_) => SizedBox(
-              height: deviceSize.height,
-              width: deviceSize.width,
-              child: Center(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _.value.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return SizedBox(
-                        height: 50,
-                        child: FittedBox(
-                          child: Text(
-                            'Rate / Complain About Employees',
-                            textAlign: TextAlign.center,
-                            style: kEltEcondtitleText.copyWith(
-                              color: kEltred,
-                              fontSize: 40,
+          return ref.watch(employeeProvider(branchID)).map(
+                data: (_) => SizedBox(
+                  height: deviceSize.height,
+                  width: deviceSize.width,
+                  child: Center(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _.value.length + 1,
+                      itemBuilder: (context, index) {
+                        if (index == 0) {
+                          return SizedBox(
+                            height: 50,
+                            child: Row(
+                              children: [
+                                InkWell(
+                                  focusColor: kEltnavy,
+                                  child: const Icon(Icons.arrow_back),
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) => Scaffold(
+                                        backgroundColor: Colors.transparent,
+                                        body: Center(
+                                          child: Container(
+                                            decoration: getBoxDecoration,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(20.0),
+                                              child: TextField(
+                                                obscureText: true,
+                                                decoration: getInputDecoration,
+                                                onChanged: (value) {
+                                                  if (value == 'snitqr3747') {
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            const MyHomePage(),
+                                                      ),
+                                                    );
+                                                  }
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                Expanded(
+                                  child: FittedBox(
+                                    child: Text(
+                                      'Suggestion & Review About Employees',
+                                      textAlign: TextAlign.center,
+                                      style: kEltEcondtitleText.copyWith(
+                                        color: kEltred,
+                                        fontSize: 40,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ),
-                      );
-                    } else {
-                      return DepartmentView(
-                        department: _.value[index - 1],
-                      );
-                    }
-                  },
+                          );
+                        } else {
+                          return DepartmentView(
+                            department: _.value[index - 1],
+                          );
+                        }
+                      },
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            error: (_) => Center(
-              child: Text(_.error.toString()),
-            ),
-            loading: (_) => const Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
+                error: (_) => Center(
+                  child: Text(_.error.toString()),
+                ),
+                loading: (_) => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
         },
       ),
     );
@@ -83,10 +131,10 @@ class _DepartmentViewState extends State<DepartmentView> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     timer!.cancel();
     _scrollController.dispose();
+    // TODO: implement dispose
+    super.dispose();
   }
 
   void autoscroll() {
