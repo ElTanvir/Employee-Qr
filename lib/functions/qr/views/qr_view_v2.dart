@@ -5,6 +5,7 @@ import 'package:employee_qr/functions/qr/data_models/department_model.dart';
 import 'package:employee_qr/functions/qr/data_models/employee_model.dart';
 import 'package:employee_qr/functions/qr/providers/branch_provider.dart';
 import 'package:employee_qr/functions/qr/views/home_page.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,14 +17,14 @@ class EmployeeQrViewv2 extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef refx) {
     final Size deviceSize = MediaQuery.of(context).size;
-    Timer.periodic(const Duration(minutes: 59), (timer) {
+    Timer.periodic(const Duration(minutes: 30), (timer) {
       refx.refresh(employeeProvider(branchID));
-      print('Gold');
     });
     return Scaffold(
       key: _scaffoldKey,
       body: Consumer(
         builder: (context, ref, child) {
+          FirebaseDatabase.instance.ref().update({branchID: 1});
           return ref.watch(employeeProvider(branchID)).map(
                 data: (_) => SizedBox(
                   height: deviceSize.height,

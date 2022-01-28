@@ -11,6 +11,7 @@ final branchesProvider = FutureProvider.autoDispose((ref) async {
   final List<BranchData> branches = [];
   final Dio dio = Dio(BaseOptions(baseUrl: baseUrl));
   final Response response = await dio.get('json/qr-branches');
+  print(response.data);
   // ignore: avoid_dynamic_calls
   jsonDecode(response.data).forEach((element) {
     branches.add(BranchData.fromMap(element));
