@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:employee_qr/constant/constants.dart';
 import 'package:employee_qr/functions/qr/data_models/branch_data_model.dart';
@@ -32,3 +34,38 @@ final employeeProvider = FutureProvider.autoDispose
 
   return departments;
 });
+
+final connectivityProvider =
+    StateNotifierProvider.autoDispose<ConnectivityNotifier, bool>(
+  (ref) => ConnectivityNotifier(),
+);
+
+class ConnectivityNotifier extends StateNotifier<bool> {
+  ConnectivityNotifier() : super(false) {
+    checkNetowrk();
+  }
+  // ignore: cancel_subscriptions
+  StreamSubscription<ConnectivityResult>? subscription;
+  void checkNetowrk() {
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.mobile ||
+          result == ConnectivityResult.wifi) {
+        print("Connected");
+        state = true;
+      } else {
+        print("Disconnected");
+        state = false;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    if (subscription != null) {
+      subscription!.cancel();
+    }
+    super.dispose();
+  }
+}

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:employee_qr/constant/constants.dart';
 import 'package:employee_qr/functions/qr/data_models/department_model.dart';
 import 'package:employee_qr/functions/qr/data_models/employee_model.dart';
@@ -17,14 +18,22 @@ class EmployeeQrViewv2 extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef refx) {
     final Size deviceSize = MediaQuery.of(context).size;
-    Timer.periodic(const Duration(minutes: 30), (timer) {
-      refx.refresh(employeeProvider(branchID));
+    refx.watch(connectivityProvider);
+    Timer.periodic(const Duration(minutes: 09), (timer) {
+      if (refx.watch(connectivityProvider)) {
+        refx.refresh(employeeProvider(branchID));
+      }
     });
     return Scaffold(
       key: _scaffoldKey,
       body: Consumer(
         builder: (context, ref, child) {
-          FirebaseDatabase.instance.ref().update({branchID: 1});
+          FirebaseDatabase.instance.ref().update({
+            branchID: {
+              'hh': DateTime.now().hour,
+              'mm': DateTime.now().minute,
+            }
+          });
           return ref.watch(employeeProvider(branchID)).map(
                 data: (_) => SizedBox(
                   height: deviceSize.height,
@@ -99,9 +108,14 @@ class EmployeeQrViewv2 extends ConsumerWidget {
                     ),
                   ),
                 ),
-                error: (_) => Center(
-                  child: Text(_.error.toString()),
-                ),
+                error: (_) {
+                  Future.delayed(const Duration(seconds: 10), () {
+                    ref.refresh(employeeProvider(branchID));
+                  });
+                  return Center(
+                    child: Text(_.error.toString()),
+                  );
+                },
                 loading: (_) => const Center(
                   child: CircularProgressIndicator(),
                 ),
@@ -275,8 +289,10 @@ class EmployeeCard extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: CircleAvatar(
-                          backgroundImage:
-                              NetworkImage('$baseUrl${employee.photo}'),
+                          backgroundImage: CachedNetworkImageProvider(
+                            '$baseUrl${employee.photo}',
+                          ),
+                          // NetworkImage('$baseUrl${employee.photo}'),
                           radius: (cardHeight * 1.5) * 0.2,
                         ),
                       ),

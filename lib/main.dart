@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:wakelock/wakelock.dart';
 // ignore_for_file: argument_type_not_assignable
 
 // ignore: avoid_void_async
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Wakelock.enable();
   await GetStorage.init();
   await Firebase.initializeApp();
   runApp(ProviderScope(child: MyApp()));
