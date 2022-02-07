@@ -6,7 +6,7 @@ import 'package:employee_qr/functions/qr/data_models/department_model.dart';
 import 'package:employee_qr/functions/qr/data_models/employee_model.dart';
 import 'package:employee_qr/functions/qr/providers/branch_provider.dart';
 import 'package:employee_qr/functions/qr/views/home_page.dart';
-import 'package:firebase_database/firebase_database.dart';
+// import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,7 +19,7 @@ class EmployeeQrViewv2 extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef refx) {
     final Size deviceSize = MediaQuery.of(context).size;
     refx.watch(connectivityProvider);
-    Timer.periodic(const Duration(minutes: 09), (timer) {
+    Timer.periodic(const Duration(hours: 6), (timer) {
       if (refx.watch(connectivityProvider)) {
         refx.refresh(employeeProvider(branchID));
       }
@@ -28,12 +28,12 @@ class EmployeeQrViewv2 extends ConsumerWidget {
       key: _scaffoldKey,
       body: Consumer(
         builder: (context, ref, child) {
-          FirebaseDatabase.instance.ref().update({
-            branchID: {
-              'hh': DateTime.now().hour,
-              'mm': DateTime.now().minute,
-            }
-          });
+          // FirebaseDatabase.instance.ref().update({
+          //   branchID: {
+          //     'hh': DateTime.now().hour,
+          //     'mm': DateTime.now().minute,
+          //   }
+          // });
           return ref.watch(employeeProvider(branchID)).map(
                 data: (_) => SizedBox(
                   height: deviceSize.height,
@@ -135,7 +135,7 @@ class DepartmentView extends StatefulWidget {
 }
 
 class _DepartmentViewState extends State<DepartmentView> {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   Timer? timer;
   @override
   void initState() {

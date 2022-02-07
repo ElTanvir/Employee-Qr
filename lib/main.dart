@@ -1,7 +1,6 @@
 import 'package:employee_qr/constant/constants.dart';
 import 'package:employee_qr/functions/qr/views/home_page.dart';
 import 'package:employee_qr/functions/qr/views/qr_view_v2.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Wakelock.enable();
   await GetStorage.init();
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
   runApp(ProviderScope(child: MyApp()));
 }
 
